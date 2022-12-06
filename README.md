@@ -30,3 +30,13 @@ make run-day01
 ```
 
 replacing the suffix `"01"` with the appropriate day.
+
+### Docker
+
+To run each solution with Docker, you may run the command:
+
+```sh
+make docker-run-day01
+```
+
+again replacing the suffix `"01"` with the appropriate day.
