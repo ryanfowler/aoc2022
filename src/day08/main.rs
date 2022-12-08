@@ -5,10 +5,10 @@ fn main() {
     let input = include_str!("./input.txt");
     let forest = Forest::parse(input);
 
-    let ans1 = forest.visible_count();
+    let ans1 = forest.total_visible();
     println!("Part 1: {}", ans1);
 
-    let ans2 = forest.most_scenic();
+    let ans2 = forest.highest_scenic_score();
     println!("Part 2: {}", ans2);
 }
 
@@ -27,42 +27,39 @@ impl Forest {
         Forest(forest)
     }
 
-    fn visible_count(&self) -> usize {
-        self.0.iter().enumerate().fold(0, |a, (row, v)| {
-            a + v
-                .iter()
-                .enumerate()
-                .filter(|&(col, _)| self.is_visible(row, col))
-                .count()
-        })
+    fn iter(&self) -> impl Iterator<Item = (usize, usize, &u32)> {
+        self.0
+            .iter()
+            .enumerate()
+            .flat_map(|(r, v)| v.iter().enumerate().map(move |(c, v)| (r, c, v)))
+    }
+
+    fn total_visible(&self) -> usize {
+        self.iter()
+            .filter(|&(row, col, _)| self.is_visible(row, col))
+            .count()
     }
 
     fn is_visible(&self, row: usize, col: usize) -> bool {
-        let ht = self.0[row][col];
-        self.0[row][..col].iter().all(|&v| v < ht)
-            || self.0[row][col + 1..].iter().all(|&v| v < ht)
-            || self.0[..row].iter().all(|v| v[col] < ht)
-            || self.0[row + 1..].iter().all(|v| v[col] < ht)
+        let height = self.0[row][col];
+        self.0[row][..col].iter().all(|&v| v < height)
+            || self.0[row][col + 1..].iter().all(|&v| v < height)
+            || self.0[..row].iter().all(|v| v[col] < height)
+            || self.0[row + 1..].iter().all(|v| v[col] < height)
     }
 
-    fn most_scenic(&self) -> i32 {
-        let mut best = 0;
-        for row in 0..self.0.len() {
-            for col in 0..self.0[row].len() {
-                best = best.max(self.scenic_score(row, col));
-            }
-        }
-        best
+    fn highest_scenic_score(&self) -> i32 {
+        self.iter()
+            .map(|(row, col, _)| self.scenic_score(row, col))
+            .fold(0, |best, v| best.max(v))
     }
 
     fn scenic_score(&self, row: usize, col: usize) -> i32 {
         let height = self.0[row][col];
-        let mut score = 1;
-        score *= score_iter(height, self.0[row][..col].iter().rev().copied());
-        score *= score_iter(height, self.0[row][col + 1..].iter().copied());
-        score *= score_iter(height, self.0[..row].iter().map(|v| v[col]).rev());
-        score *= score_iter(height, self.0[row + 1..].iter().map(|v| v[col]));
-        score
+        score_iter(height, self.0[row][..col].iter().rev().copied())
+            * score_iter(height, self.0[row][col + 1..].iter().copied())
+            * score_iter(height, self.0[..row].iter().map(|v| v[col]).rev())
+            * score_iter(height, self.0[row + 1..].iter().map(|v| v[col]))
     }
 }
 
