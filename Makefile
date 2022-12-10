@@ -1,8 +1,18 @@
+.PHONY: all setup-day% build-day% run-all run-day% docker-build-day% docker-run-day%
+
+all: run-all
+
 setup-day%:
 	@./setup.sh $*
 
 build-day%: setup-day%
-	@cargo build --release --bin day$*
+	@cargo --quiet build --release --bin day$*
+
+run-all:
+	@echo "Compiling all available days..."
+	@ls -d ./src/* | grep -o '..$$' | xargs -I % sh -c 'make -s build-day%'
+	@echo
+	@ls -d ./src/* | grep -o '..$$' | time -p xargs -I % sh -c './target/release/day% && echo'
 
 run-day%: build-day%
 	@./target/release/day$*
