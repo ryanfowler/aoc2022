@@ -9,9 +9,9 @@ build-day%: setup-day%
 	@cargo --quiet build --release --bin day$*
 
 run-all:
-	@echo "Compiling all available days..."
-	@ls -d ./src/* | grep -o '..$$' | xargs -I % sh -c 'make -s build-day%'
-	@echo
+	@echo "Compiling all available days...\n"
+	@ls -d ./src/* | grep -o '..$$' | xargs -P 16 -I % sh -c 'make -s setup-day%'
+	@ls -d ./src/* | grep -o '..$$' | xargs -I {} echo "--bin day{}" | xargs -n 32 sh -c 'cargo build -q --release'
 	@ls -d ./src/* | grep -o '..$$' | time -p xargs -I % sh -c './target/release/day% && echo'
 
 run-day%: build-day%
