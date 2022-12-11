@@ -23,6 +23,12 @@ replacing the suffix `"01"` with the appropriate day.
 
 ## Running
 
+To run the code for all available days, use the command:
+
+```sh
+make
+```
+
 To actually run the code for a specific day, you may run the command:
 
 ```sh
