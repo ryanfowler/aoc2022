@@ -9,9 +9,11 @@ fn main() {
         .collect::<Vec<i32>>();
     calories.sort_by(|a, b| b.cmp(a));
 
+    let ts = std::time::SystemTime::now();
     let ans1: i32 = calories.iter().take(1).sum();
-    println!("Part 1: {}", ans1);
+    println!("Part 1: {} ({:?})", ans1, ts.elapsed().unwrap());
 
+    let ts = std::time::SystemTime::now();
     let ans2: i32 = calories.iter().take(3).sum();
-    println!("Part 2: {}", ans2);
+    println!("Part 2: {} ({:?})", ans2, ts.elapsed().unwrap());
 }

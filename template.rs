@@ -4,7 +4,9 @@ fn main() {
 
     let _input = include_str!("./input.txt");
 
-    println!("Part 1: {}", 0);
+    let ts = std::time::SystemTime::now();
+    println!("Part 1: {} ({:?})", 0, ts.elapsed().unwrap());
 
-    println!("Part 2: {}", 0);
+    let ts = std::time::SystemTime::now();
+    println!("Part 2: {} ({:?})", 0, ts.elapsed().unwrap());
 }

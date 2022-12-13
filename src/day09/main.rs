@@ -6,11 +6,13 @@ fn main() {
 
     let input = include_str!("./input.txt");
 
+    let ts = std::time::SystemTime::now();
     let ans1 = tail_positions(input, 1);
-    println!("Part 1: {}", ans1);
+    println!("Part 1: {} ({:?})", ans1, ts.elapsed().unwrap());
 
+    let ts = std::time::SystemTime::now();
     let ans2 = tail_positions(input, 9);
-    println!("Part 2: {}", ans2);
+    println!("Part 2: {} ({:?})", ans2, ts.elapsed().unwrap());
 }
 
 fn tail_positions(input: &str, num_tails: usize) -> usize {

@@ -4,11 +4,17 @@ fn main() {
 
     let input = include_str!("./input.txt");
 
+    let ts = std::time::SystemTime::now();
     let ans1 = signal_strengths(input);
-    println!("Part 1: {}", ans1);
+    println!("Part 1: {} ({:?})", ans1, ts.elapsed().unwrap());
 
+    let ts = std::time::SystemTime::now();
     let ans2 = render_crt(input);
-    println!("Part 2:\n{}", ans2.join("\n"));
+    println!(
+        "Part 2:\n{}\n({:?})",
+        ans2.join("\n"),
+        ts.elapsed().unwrap()
+    );
 }
 
 fn signal_strengths(input: &str) -> i32 {

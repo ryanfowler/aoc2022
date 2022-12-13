@@ -7,19 +7,21 @@ fn main() {
     let input = include_str!("./input.txt");
     let sizes = parse_sizes(input);
 
+    let ts = std::time::SystemTime::now();
     let ans1: i32 = sizes
         .iter()
         .filter(|(_, &v)| v <= 100_000)
         .map(|(_, &v)| v)
         .sum();
-    println!("Part 1: {}", ans1);
+    println!("Part 1: {} ({:?})", ans1, ts.elapsed().unwrap());
 
+    let ts = std::time::SystemTime::now();
     let to_free = *sizes.get("/").unwrap() - 40_000_000;
     let ans2 = sizes
         .iter()
         .filter(|(_, &v)| v >= to_free)
         .fold(i32::MAX, |min, (_, &v)| std::cmp::min(min, v));
-    println!("Part 2: {}", ans2);
+    println!("Part 2: {} ({:?})", ans2, ts.elapsed().unwrap());
 }
 
 fn parse_sizes(s: &str) -> HashMap<String, i32> {
