@@ -17,12 +17,12 @@ fn main() {
 }
 
 fn part1(pairs: &[(Value, Value)]) -> usize {
-    pairs.iter().enumerate().fold(0, |mut acc, (i, pair)| {
-        if pair.0 < pair.1 {
-            acc += i + 1
-        }
-        acc
-    })
+    pairs
+        .iter()
+        .enumerate()
+        .filter(|(_, pair)| pair.0 < pair.1)
+        .map(|(i, _)| i + 1)
+        .sum()
 }
 
 fn part2(pairs: &[(Value, Value)]) -> usize {
