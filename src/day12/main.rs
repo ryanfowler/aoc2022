@@ -12,7 +12,7 @@ fn main() {
     println!("Part 1: {} ({:?})", ans1, ts.elapsed().unwrap());
 
     let ts = std::time::SystemTime::now();
-    let ans2 = map.part2(end, b'a').unwrap();
+    let ans2 = map.part2(end).unwrap();
     println!("Part 2: {} ({:?})", ans2, ts.elapsed().unwrap());
 }
 
@@ -32,36 +32,35 @@ impl Map {
     }
 
     fn part1(&self, start: (usize, usize), end: (usize, usize)) -> Option<u32> {
-        self.astar(start, |c, d| d <= c + 1, |c| distance(c, end), |c| c == end)
+        self.a_star(&[start], end)
     }
 
-    fn part2(&self, start: (usize, usize), goal: u8) -> Option<u32> {
-        self.astar(
-            start,
-            |c, d| d >= c - 1,
-            |_| 0,
-            |c| self.0[c.1][c.0] == goal,
-        )
+    fn part2(&self, end: (usize, usize)) -> Option<u32> {
+        let mut starts = Vec::new();
+        for y in 0..self.0.len() {
+            for x in 0..self.0[0].len() {
+                if self.0[y][x] == b'a' {
+                    starts.push((x, y));
+                }
+            }
+        }
+        self.a_star(&starts, end)
     }
 
-    fn astar(
-        &self,
-        start: (usize, usize),
-        allowed: impl Fn(u8, u8) -> bool,
-        heuristic: impl Fn((usize, usize)) -> u32,
-        end: impl Fn((usize, usize)) -> bool,
-    ) -> Option<u32> {
+    fn a_star(&self, starts: &[(usize, usize)], end: (usize, usize)) -> Option<u32> {
         let mut open = BinaryHeap::new();
         let mut seen = vec![vec![None; self.0[0].len()]; self.0.len()];
-        seen[start.1][start.0] = Some(0);
-        open.push(Point {
-            coords: start,
-            distance: heuristic(start),
-            steps: 0,
-        });
+        for &start in starts {
+            seen[start.1][start.0] = Some(0);
+            open.push(Point {
+                coords: start,
+                distance: distance(start, end),
+                steps: 0,
+            });
+        }
 
         while let Some(point) = open.pop() {
-            if end(point.coords) {
+            if point.coords == end {
                 return Some(point.steps);
             }
             if let Some(steps) = seen[point.coords.1][point.coords.0] {
@@ -80,7 +79,7 @@ impl Map {
                 if n.0 >= self.0[0].len() || n.1 >= self.0.len() {
                     continue;
                 }
-                if !allowed(self.0[c.1][c.0], self.0[n.1][n.0]) {
+                if self.0[n.1][n.0] > self.0[c.1][c.0] + 1 {
                     continue;
                 }
                 let new_steps = point.steps + 1;
@@ -92,7 +91,7 @@ impl Map {
                 seen[n.1][n.0] = Some(new_steps);
                 open.push(Point {
                     coords: n,
-                    distance: new_steps + heuristic(n),
+                    distance: new_steps + distance(n, end),
                     steps: new_steps,
                 });
             }
