@@ -42,8 +42,9 @@ fn calc_sand(mut set: HashSet<(i32, i32)>, is_floor: bool) -> i32 {
         .fold(i32::MIN, |acc, v| if v.1 > acc { v.1 } else { acc });
     let floor = max_y + 2;
 
+    let mut path = Vec::new();
     for i in 0.. {
-        let mut sand = (500, 0);
+        let mut sand = path.pop().unwrap_or((500, 0));
         loop {
             if !is_floor && sand.1 > max_y {
                 return i;
@@ -55,11 +56,14 @@ fn calc_sand(mut set: HashSet<(i32, i32)>, is_floor: bool) -> i32 {
             } else if set.get(&(sand.0 + 1, sand.1 + 1)).is_none() {
                 sand = (sand.0 + 1, sand.1 + 1);
             } else {
+                path.pop();
                 break;
             }
             if is_floor && sand.1 + 1 == floor {
+                path.pop();
                 break;
             }
+            path.push(sand);
         }
         if sand == (500, 0) {
             return i + 1;
