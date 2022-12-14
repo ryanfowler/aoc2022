@@ -5,13 +5,13 @@ fn main() {
     let input = include_str!("./input.txt");
     let forest = Forest::parse(input);
 
-    let ts = std::time::SystemTime::now();
+    let ts = std::time::Instant::now();
     let ans1 = forest.total_visible();
-    println!("Part 1: {} ({:?})", ans1, ts.elapsed().unwrap());
+    println!("Part 1: {} ({:?})", ans1, ts.elapsed());
 
-    let ts = std::time::SystemTime::now();
+    let ts = std::time::Instant::now();
     let ans2 = forest.highest_scenic_score();
-    println!("Part 2: {} ({:?})", ans2, ts.elapsed().unwrap());
+    println!("Part 2: {} ({:?})", ans2, ts.elapsed());
 }
 
 struct Forest(Vec<Vec<u32>>);

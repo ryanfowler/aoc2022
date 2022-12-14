@@ -4,16 +4,16 @@ fn main() {
 
     let input = include_str!("./input.txt");
 
-    let ts = std::time::SystemTime::now();
+    let ts = std::time::Instant::now();
     let ans1 = input.lines().fold(0, |score, line| {
         let them = Shape::parse(line.chars().next().unwrap()).unwrap();
         let me = Shape::parse(line.chars().nth(2).unwrap()).unwrap();
         let result = me.play(them);
         score + result.score() + me.score()
     });
-    println!("Part 1: {} ({:?})", ans1, ts.elapsed().unwrap());
+    println!("Part 1: {} ({:?})", ans1, ts.elapsed());
 
-    let ts = std::time::SystemTime::now();
+    let ts = std::time::Instant::now();
     let ans2 = input.lines().fold(0, |score, line| {
         let them = Shape::parse(line.chars().next().unwrap()).unwrap();
         let result = Result::parse(line.chars().nth(2).unwrap()).unwrap();
@@ -28,7 +28,7 @@ fn main() {
         };
         score + result.score() + me.score()
     });
-    println!("Part 2: {} ({:?})", ans2, ts.elapsed().unwrap());
+    println!("Part 2: {} ({:?})", ans2, ts.elapsed());
 }
 
 #[derive(PartialEq)]

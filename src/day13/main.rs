@@ -7,13 +7,13 @@ fn main() {
     let input = include_str!("./input.txt").trim_end();
     let pairs: Vec<(Value, Value)> = parse_input(input);
 
-    let ts = std::time::SystemTime::now();
+    let ts = std::time::Instant::now();
     let ans1 = part1(&pairs);
-    println!("Part 1: {} ({:?})", ans1, ts.elapsed().unwrap());
+    println!("Part 1: {} ({:?})", ans1, ts.elapsed());
 
-    let ts = std::time::SystemTime::now();
+    let ts = std::time::Instant::now();
     let ans2 = part2(&pairs);
-    println!("Part 2: {} ({:?})", ans2, ts.elapsed().unwrap());
+    println!("Part 2: {} ({:?})", ans2, ts.elapsed());
 }
 
 fn part1(pairs: &[(Value, Value)]) -> usize {

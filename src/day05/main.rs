@@ -5,21 +5,21 @@ fn main() {
     let input = include_str!("./input.txt");
     let (raw_stacks, raw_instructions) = input.split_once("\n\n").unwrap();
 
-    let ts = std::time::SystemTime::now();
+    let ts = std::time::Instant::now();
     let mut stacks = Stacks::parse(raw_stacks);
     for inst in raw_instructions.lines().map(Instruction::parse) {
         stacks.move_crates_single(inst)
     }
     let ans1 = stacks.top_crates();
-    println!("Part 1: {} ({:?})", ans1, ts.elapsed().unwrap());
+    println!("Part 1: {} ({:?})", ans1, ts.elapsed());
 
-    let ts = std::time::SystemTime::now();
+    let ts = std::time::Instant::now();
     let mut stacks = Stacks::parse(raw_stacks);
     for inst in raw_instructions.lines().map(Instruction::parse) {
         stacks.move_crates_multi(inst)
     }
     let ans2 = stacks.top_crates();
-    println!("Part 2: {} ({:?})", ans2, ts.elapsed().unwrap());
+    println!("Part 2: {} ({:?})", ans2, ts.elapsed());
 }
 
 #[derive(Debug)]

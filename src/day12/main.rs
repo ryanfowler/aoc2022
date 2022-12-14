@@ -7,13 +7,13 @@ fn main() {
     let input = include_str!("./input.txt");
     let (map, start, end) = Map::parse(input);
 
-    let ts = std::time::SystemTime::now();
+    let ts = std::time::Instant::now();
     let ans1 = map.part1(start, end).unwrap();
-    println!("Part 1: {} ({:?})", ans1, ts.elapsed().unwrap());
+    println!("Part 1: {} ({:?})", ans1, ts.elapsed());
 
-    let ts = std::time::SystemTime::now();
+    let ts = std::time::Instant::now();
     let ans2 = map.part2(end).unwrap();
-    println!("Part 2: {} ({:?})", ans2, ts.elapsed().unwrap());
+    println!("Part 2: {} ({:?})", ans2, ts.elapsed());
 }
 
 struct Map(Vec<Vec<u8>>);
