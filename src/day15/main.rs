@@ -43,24 +43,31 @@ fn part2(input: &[((i32, i32), i32)]) -> i64 {
     const MAX: i32 = 4_000_000;
     let allowed = MIN..=MAX;
 
-    for &((sx, sy), distance) in input {
-        let edge = distance + 1;
-        for ex in -edge..=edge {
-            let x = sx + ex;
-            if !allowed.contains(&x) {
+    let mut l_to_r = Vec::new();
+    let mut r_to_l = Vec::new();
+    for &((x, y), d) in input {
+        let x0 = x - d - 1;
+        let x1 = x + d + 1;
+        l_to_r.push(x0 - y);
+        l_to_r.push(x1 - y);
+        r_to_l.push(x0 + y);
+        r_to_l.push(x1 + y);
+    }
+    l_to_r.sort_unstable();
+    r_to_l.sort_unstable();
+
+    for l in l_to_r {
+        for r in &r_to_l {
+            let n = (r - l) / 2;
+            let (x, y) = (l + n, n);
+            if !allowed.contains(&x) || !allowed.contains(&y) {
                 continue;
             }
-            let dy = edge - ex;
-            for y in [sy + dy, sy - dy] {
-                if !allowed.contains(&y) {
-                    continue;
-                }
-                if input
-                    .iter()
-                    .all(|&((bx, by), d)| (bx - x).abs() + (by - y).abs() >= d)
-                {
-                    return x as i64 * MAX as i64 + y as i64;
-                }
+            if input
+                .iter()
+                .all(|&((bx, by), d)| (bx - x).abs() + (by - y).abs() >= d)
+            {
+                return x as i64 * MAX as i64 + y as i64;
             }
         }
     }
